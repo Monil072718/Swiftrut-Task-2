@@ -1,51 +1,51 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { getPosts, deletePost } from '../Api';
+import { BlogContext } from '../Context/BlogContext';
+import { PencilIcon, TrashIcon } from '@heroicons/react/outline';// Importing icons
 
 const PostList = () => {
-  const [posts, setPosts] = useState([]);
-
-  useEffect(() => {
-    fetchPosts();
-  }, []);
-
-  const fetchPosts = async () => {
-    const response = await getPosts();
-    setPosts(response.data);
-  };
-
-  const handleDelete = async (id) => {
-    await deletePost(id);
-    fetchPosts(); // Refresh posts after deletion
-  };
+  const { posts, deletePost } = useContext(BlogContext);
 
   return (
-    <div className="max-w-4xl mx-auto mt-10">
-      <h2 className="text-3xl font-semibold mb-6">All Blog Posts</h2>
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-        {posts.map((post) => (
-          <div key={post._id} className="bg-white p-6 shadow-md rounded-lg">
-            <Link to={`/post/${post._id}`}>
-              <h3 className="text-xl font-bold text-indigo-600 mb-2">{post.title}</h3>
-            </Link>
-            <p className="text-gray-600 mb-4">{post.content.substring(0, 100)}...</p>
-            <div className="flex justify-between items-center">
-              <button
-                onClick={() => handleDelete(post._id)}
-                className="text-red-500 hover:text-red-600"
-              >
-                Delete
-              </button>
-              <Link
-                to={`/edit/${post._id}`}
-                className="text-indigo-600 hover:text-indigo-700"
-              >
-                Edit
-              </Link>
-            </div>
-          </div>
-        ))}
-      </div>
+    <div className="max-w-4xl mx-auto mt-10 px-4 sm:px-6 lg:px-8">
+      <h2 className="text-4xl font-extrabold text-center text-gray-900 mb-8">
+        All Blog Posts
+      </h2>
+      {posts.length > 0 ? (
+        <ul className="space-y-6">
+          {posts.map((post) => (
+            <li key={post._id} className="bg-white shadow-lg rounded-lg overflow-hidden">
+              <div className="p-6">
+                <div className="flex justify-between items-start">
+                  <Link
+                    to={`/post/${post._id}`}
+                    className="text-2xl font-semibold text-indigo-600 hover:text-indigo-500 transition duration-200"
+                  >
+                    {post.title}
+                  </Link>
+                  <div className="flex space-x-4">
+                    <button
+                      onClick={() => deletePost(post._id)}
+                      className="text-red-600 hover:text-red-800 transition duration-200 focus:outline-none"
+                    >
+                      <TrashIcon className="w-6 h-6" /> {/* Delete Icon */}
+                    </button>
+                    <Link
+                      to={`/edit/${post._id}`}
+                      className="text-blue-600 hover:text-blue-800 transition duration-200 focus:outline-none"
+                    >
+                      <PencilIcon className="w-6 h-6" /> {/* Edit Icon */}
+                    </Link>
+                  </div>
+                </div>
+                <p className="mt-4 text-gray-700 line-clamp-3">{post.content}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="text-center text-gray-600">No blog posts available. Create your first post!</p>
+      )}
     </div>
   );
 };
