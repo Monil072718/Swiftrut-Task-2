@@ -5,6 +5,7 @@ import CreatePost from './components/CreatePost';
 import EditPost from './components/EditPost';
 import Navbar from './components/Navbar';
 import PostDetail from './components/PostDeatils';
+import './App.css';
 function App() {
   return (
     <Router>

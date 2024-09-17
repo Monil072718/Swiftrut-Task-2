@@ -16,10 +16,14 @@ const PostDetail = () => {
   };
 
   return (
-    <div>
-      <h2>{post.title}</h2>
-      <p>{post.content}</p>
-      <p>{new Date(post.createdAt).toLocaleDateString()}</p>
+    <div className="max-w-2xl mx-auto mt-10">
+      <div className="bg-white shadow-md rounded-lg p-6">
+        <h2 className="text-3xl font-bold mb-4">{post.title}</h2>
+        <p className="text-gray-700 mb-4">{post.content}</p>
+        <p className="text-sm text-gray-500">
+          {new Date(post.createdAt).toLocaleDateString()}
+        </p>
+      </div>
     </div>
   );
 };
